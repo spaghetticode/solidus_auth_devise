@@ -17,17 +17,30 @@ module Spree
     end
 
     if SolidusSupport.frontend_available?
-      def spree_login_path
-        spree.login_path
-      end
+      # forse non servono... nessuna spec rossa dopo averli commentati.
+      # sembrano usati dentro a solidus:
+      # def store_location
+      #   # disallow return to login, logout, signup pages
+      #   authentication_routes = [:spree_signup_path, :spree_login_path, :spree_logout_path]
+      #   disallowed_urls = []
+      #   authentication_routes.each do |route|
+      #     if respond_to?(route)
+      #       disallowed_urls << send(route)
+      #     end
+      #   end
 
-      def spree_signup_path
-        spree.signup_path
-      end
 
-      def spree_logout_path
-        spree.logout_path
-      end
+      # def spree_login_path
+      #   spree.login_path
+      # end
+
+      # def spree_signup_path
+      #   spree.signup_path
+      # end
+
+      # def spree_logout_path
+      #   spree.logout_path
+      # end
     end
   end
 end

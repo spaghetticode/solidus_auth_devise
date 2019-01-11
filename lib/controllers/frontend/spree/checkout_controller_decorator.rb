@@ -12,7 +12,7 @@ Spree::CheckoutController.class_eval do
   end
 
   def update_registration
-    if params[:order][:email] =~ Devise.email_regexp && current_order.update_attributes(email: params[:order][:email])
+    if params[:order][:email] =~ Devise.email_regexp && current_order.update_attributes(email: params[:order][:email]) # FIXME Devise.email_regexp
       redirect_to spree.checkout_path
     else
       flash[:registration_error] = t(:email_is_invalid, scope: [:errors, :messages])
@@ -44,17 +44,17 @@ Spree::CheckoutController.class_eval do
     end
 
     def registration_required?
-      Spree::Auth::Config[:registration_step] &&
+      Spree::Auth::Config[:registration_step] && # spostare anche il setting
         !already_registered?
     end
 
     def already_registered?
-      spree_current_user || guest_authenticated?
+      spree_current_user || guest_authenticated? # usare try_spree_current_user
     end
 
     def guest_authenticated?
       current_order.try!(:email).present? &&
-        Spree::Config[:allow_guest_checkout]
+        Spree::Config[:allow_guest_checkout] # spostare il setting
     end
 
     # Overrides the equivalent method defined in Spree::Core.  This variation of the method will ensure that users
@@ -62,5 +62,15 @@ Spree::CheckoutController.class_eval do
     def completion_route
       return spree.order_path(@order) if spree_current_user
       spree.token_order_path(@order, @order.guest_token)
+    end
+
+    # dentro solidus c'è:
+    # def completion_route
+    #   spree.order_path(@order)
+    # end
+    # magari così può funzionare dentro solidus:
+    def completion_route
+      return spree.order_path(@order) if try_spree_current_user || !@order.guest_token
+      spree.token_order_path(@order, @order.guest_token) if @order.guest_token
     end
 end

@@ -28,4 +28,6 @@ end
 
 gem 'deface', require: false
 
+gem 'rake-notes'
+
 gemspec

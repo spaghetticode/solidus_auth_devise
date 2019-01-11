@@ -10,6 +10,9 @@ class Spree::UserSessionsController < Devise::SessionsController
   # it after someone has successfully logged in.
   after_action :set_current_order, only: :create
 
+  def new # implicito, metodo vuoto per fortuna :)
+  end
+
   def create
     authenticate_spree_user!
 
@@ -35,15 +38,19 @@ class Spree::UserSessionsController < Devise::SessionsController
     end
   end
 
+  def destroy # FIXME destroy è implicito, usa la definizione di devise
+    super
+  end
+
   protected
 
-  def translation_scope
+  def translation_scope # usato da devise
     'devise.user_sessions'
   end
 
   private
 
-  def accurate_title
+  def accurate_title # che pessimo nome! non sembra essere roba di devise
     I18n.t('spree.login')
   end
 
