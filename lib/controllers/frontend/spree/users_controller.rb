@@ -1,15 +1,10 @@
 # frozen_string_literal: true
 
 class Spree::UsersController < Spree::StoreController
-  skip_before_action :set_current_order, only: :show, raise: false
-  prepend_before_action :load_object, only: [:show, :edit, :update]
+  prepend_before_action :load_object, only: [:edit, :update]
   prepend_before_action :authorize_actions, only: :new
 
   include Spree::Core::ControllerHelpers
-
-  def show
-    @orders = @user.orders.complete.order('completed_at desc')
-  end
 
   def create
     @user = Spree::User.new(user_params)
