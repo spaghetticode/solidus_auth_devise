@@ -3,6 +3,7 @@
 module Spree
   module UsersControllerDecorator
     def self.prepended(base)
+      puts "** prepending #{base} in solidus_auth_devise"
       base.prepend_before_action :authorize_actions, only: :new
       base.prepend_before_action :load_object, only: [:show, :edit, :update]
     end
@@ -60,6 +61,7 @@ module Spree
       Spree::UsersController.prepend(self)
     else
       class Spree::UsersController < Spree::StoreController
+        puts "** defining #{self} in solidus_auth_devise"
         skip_before_action :set_current_order, only: :show, raise: false
         prepend_before_action :load_object, only: [:show, :edit, :update]
         prepend_before_action :authorize_actions, only: :new
